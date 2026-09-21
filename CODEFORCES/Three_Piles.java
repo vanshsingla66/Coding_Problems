@@ -21,6 +21,7 @@ public class Three_Piles {
             }
  
             System.out.println(ans);
+            sc.close();
         }
     }
     
