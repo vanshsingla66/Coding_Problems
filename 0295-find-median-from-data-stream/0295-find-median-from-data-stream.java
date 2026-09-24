@@ -7,15 +7,11 @@ class MedianFinder {
     }
     
     public void addNum(int num) {
-        if(max.isEmpty()){
-            max.add(num);
-        }
-        else{
-            max.add(num);
-            min.add(max.poll());
-            if(min.size()>max.size()){
-                max.add(min.poll());
-            }
+        
+        max.add(num);
+        min.add(max.poll());
+        if(min.size()>max.size()){
+            max.add(min.poll());
         }
     }
     
