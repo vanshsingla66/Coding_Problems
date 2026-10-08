@@ -1,27 +1,23 @@
 class Solution {
     public String removeOuterParentheses(String s) {
+        StringBuilder ans = new StringBuilder();
         int bal = 0;
-        return solve(s,new StringBuilder(),bal);
-    }
-    public static String solve(String s, StringBuilder ch,int bal){
         for(int i=0;i<s.length();i++){
             char c = s.charAt(i);
-            if(c == '('){
+            if(c=='('){
                 if(bal>0){
-                    ch.append(c);
+                    ans.append(c);
                 }
                 bal++;
-                
             }
             else{
                 bal--;
                 if(bal>0){
-                    ch.append(c);
+                    ans.append(c);
                 }
             }
-            
         }
-        return ch.toString();
+        return ans.toString();
     }
 }
 
