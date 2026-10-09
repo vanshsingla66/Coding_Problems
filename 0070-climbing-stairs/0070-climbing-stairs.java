@@ -1,15 +1,14 @@
 class Solution {
     public int climbStairs(int n) {
-        int curr = 1;
-        int prev = 1;
+        int com1=1;
+        int com2=1;
         for(int i=0;i<n;i++){
-            int temp = curr;
-            curr = curr+prev;
-            prev = temp;
+            int temp = com1;
+            com1 = com1+com2;
+            com2 = temp;
 
         }
-        return prev;
-        // return climbStairs(n-1)+climbStairs(n-2);
+        return com2;
     }
 }
 
