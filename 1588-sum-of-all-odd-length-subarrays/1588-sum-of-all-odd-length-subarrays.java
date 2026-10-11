@@ -4,10 +4,11 @@ class Solution {
         int ans = 0;
 
         for (int i = 0; i < n; i++) {
-            int count = (i + 1) * (n - i);
-            int oddCount = (count + 1) / 2;
-
-            ans += arr[i] * oddCount;
+            for(int len = 1;len+i<= n;len+=2){
+                for(int j=i;j<i+len;j++){
+                    ans+=arr[j];
+                }
+            }
         }
 
         return ans;
