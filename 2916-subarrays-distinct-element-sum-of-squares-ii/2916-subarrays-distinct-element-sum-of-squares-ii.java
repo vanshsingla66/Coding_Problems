@@ -1,101 +1,62 @@
-
 class Solution {
-    private static final long MOD = 1_000_000_007L;
+    static final long MOD = 1000000007L;
+
+    long[] sum, sq, lazy;
+    int n;
 
     public int sumCounts(int[] nums) {
-        int n = nums.length;
-
-        long[] sum = new long[4 * n];
-        long[] squareSum = new long[4 * n];
-        long[] lazy = new long[4 * n];
+        n = nums.length;
+        sum = new long[4 * n];
+        sq = new long[4 * n];
+        lazy = new long[4 * n];
 
         int[] last = new int[100001];
-        java.util.Arrays.fill(last, -1);
-
         long ans = 0;
 
         for (int i = 0; i < n; i++) {
-            int left = last[nums[i]] + 1;
-
-            update(1, 0, n - 1, left, i,
-                   sum, squareSum, lazy);
-
-            last[nums[i]] = i;
-            ans = (ans + squareSum[1]) % MOD;
+            int prev = last[nums[i]];
+            update(1, 1, n, prev + 1, i + 1);
+            ans = (ans + sq[1]) % MOD;
+            last[nums[i]] = i + 1;
         }
 
         return (int) ans;
     }
 
-    private void update(
-        int node, int start, int end,
-        int left, int right,
-        long[] sum, long[] squareSum, long[] lazy
-    ) {
-        if (start > right || end < left) {
-            return;
-        }
-
-        if (left <= start && end <= right) {
-            apply(node, start, end, 1,
-                  sum, squareSum, lazy);
-            return;
-        }
-
-        push(node, start, end, sum, squareSum, lazy);
-
-        int mid = (start + end) / 2;
-
-        update(node * 2, start, mid, left, right,
-               sum, squareSum, lazy);
-
-        update(node * 2 + 1, mid + 1, end, left, right,
-               sum, squareSum, lazy);
-
-        sum[node] =
-            (sum[node * 2] + sum[node * 2 + 1]) % MOD;
-
-        squareSum[node] =
-            (squareSum[node * 2] + squareSum[node * 2 + 1]) % MOD;
+    void apply(int node, int l, int r, long v) {
+        long len = r - l + 1L;
+        sq[node] = (sq[node] + 2 * v * sum[node] + len * v * v) % MOD;
+        sum[node] = (sum[node] + len * v) % MOD;
+        lazy[node] = (lazy[node] + v) % MOD;
     }
 
-    private void apply(
-        int node, int start, int end, long add,
-        long[] sum, long[] squareSum, long[] lazy
-    ) {
-        long length = end - start + 1L;
+    void push(int node, int l, int r) {
+        if (lazy[node] == 0 || l == r) return;
 
-        squareSum[node] = (
-            squareSum[node]
-            + 2 * add % MOD * sum[node] % MOD
-            + add * add % MOD * length % MOD
-        ) % MOD;
-
-        sum[node] = (sum[node] + add * length) % MOD;
-        lazy[node] = (lazy[node] + add) % MOD;
-    }
-
-    private void push(
-        int node, int start, int end,
-        long[] sum, long[] squareSum, long[] lazy
-    ) {
-        if (lazy[node] == 0 || start == end) {
-            return;
-        }
-
-        int mid = (start + end) / 2;
-        long pending = lazy[node];
-
-        apply(node * 2, start, mid, pending,
-              sum, squareSum, lazy);
-
-        apply(node * 2 + 1, mid + 1, end, pending,
-              sum, squareSum, lazy);
-
+        int mid = (l + r) / 2;
+        apply(node * 2, l, mid, lazy[node]);
+        apply(node * 2 + 1, mid + 1, r, lazy[node]);
         lazy[node] = 0;
     }
-}
 
+    void update(int node, int l, int r, int ql, int qr) {
+        if (ql > r || qr < l) return;
+
+        if (ql <= l && r <= qr) {
+            apply(node, l, r, 1);
+            return;
+        }
+
+        push(node, l, r);
+
+        int mid = (l + r) / 2;
+        update(node * 2, l, mid, ql, qr);
+        update(node * 2 + 1, mid + 1, r, ql, qr);
+
+        sum[node] = (sum[node * 2] + sum[node * 2 + 1]) % MOD;
+        sq[node] = (sq[node * 2] + sq[node * 2 + 1]) % MOD;
+    }
+}
 
 // Synced seamlessly with LeetHub Pro
 // Pro features: https://bit.ly/leethubpro | Free version: https://bit.ly/leethubv4
