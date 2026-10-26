@@ -1,31 +1,49 @@
+
+import java.util.Arrays;
+
 class Solution {
     public int minPathSum(int[][] grid) {
         int m = grid.length;
         int n = grid[0].length;
-        int[][] memo = new int[m][n];
-        for (int i = 0; i < m; i++) {
-            for (int j = 0; j < n; j++) {
-                memo[i][j] = -1;
-            }
-        }
-        return solve(grid,0,0,memo);
-    }
-    public int solve(int[][] grid, int cr, int cc,int[][] memo){
-        if(cr==grid.length-1&&cc==grid[0].length-1){
-            return grid[cr][cc];
-        }
-        if(cr>=grid.length || cc>=grid[0].length){
-            return Integer.MAX_VALUE;
-        }
-        if(memo[cr][cc]!=-1){
-            return memo[cr][cc];
-        }
-        int r = solve(grid,cr,cc+1,memo);
-        int d = solve(grid,cr+1,cc,memo);
 
-        return memo[cr][cc] = grid[cr][cc] + Math.min(r,d);
+        int[][] dp = new int[m][n];
+
+        for (int[] row : dp) {
+            Arrays.fill(row, -1);
+        }
+
+        return solve(0, 0, grid, m, n, dp);
+    }
+
+    public int solve(int row, int column, int[][] grid,
+                     int m, int n, int[][] dp) {
+
+        if (row == m - 1 && column == n - 1) {
+            return grid[row][column];
+        }
+
+        if (dp[row][column] != -1) {
+            return dp[row][column];
+        }
+
+        int right = Integer.MAX_VALUE;
+        int down = Integer.MAX_VALUE;
+
+        if (column + 1 < n) {
+            right = solve(row, column + 1, grid, m, n, dp);
+        }
+
+        if (row + 1 < m) {
+            down = solve(row + 1, column, grid, m, n, dp);
+        }
+
+        dp[row][column] =
+            grid[row][column] + Math.min(right, down);
+
+        return dp[row][column];
     }
 }
+
 
 // Synced seamlessly with LeetHub Pro
 // Pro features: https://bit.ly/leethubpro | Free version: https://bit.ly/leethubv4
