@@ -1,24 +1,25 @@
 class Solution {
-    int[] DAYS_IN_MONTH = {31,28,31,30,31,30,31,31,30,31,30,31};
+    int[] day_in_month = {31,28,31,30,31,30,31,31,30,31,30,31};
     public int countDaysTogether(String arriveAlice, String leaveAlice, String arriveBob, String leaveBob) {
-        int aliceStart = doy(arriveAlice);
-        int aliceEnd = doy(leaveAlice);
-        int bobStart = doy(arriveBob);
-        int bobEnd = doy(leaveBob);
+        int startalice = totalday(arriveAlice);
+        int endalice = totalday(leaveAlice);
+        int startbob = totalday(arriveBob);
+        int endbob = totalday(leaveBob);
 
-        int overlapStart = Math.max(aliceStart,bobStart);
-        int overlapEnd = Math.min(aliceEnd,bobEnd);
-        return Math.max(0,overlapEnd-overlapStart+1); 
+        int overlapst = Math.max(startalice,startbob);
+        int overlapend = Math.min(endalice,endbob);
+        return Math.max(0,overlapend-overlapst+1);
+        
     }
-    public int doy(String date){
-        int month = Integer.parseInt(date.substring(0,2));
-        int day = Integer.parseInt(date.substring(3,5));
+    public int totalday(String s){
+        int month = Integer.parseInt(s.substring(0,2));
+        int day = Integer.parseInt(s.substring(3,5));
 
-        int dayOfYear = day;
+        int d = day;
         for(int i=0;i<month-1;i++){
-            dayOfYear+=DAYS_IN_MONTH[i];
+            d+=day_in_month[i];
         }
-        return dayOfYear;
+        return d;
     }
 }
 
