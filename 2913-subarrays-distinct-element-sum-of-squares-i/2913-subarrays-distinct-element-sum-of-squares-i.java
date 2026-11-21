@@ -1,19 +1,14 @@
-
-import java.util.*;
-
 class Solution {
     public int sumCounts(List<Integer> nums) {
         int ans = 0;
         int n = nums.size();
+        for(int i=0;i<n;i++){
+            HashSet<Integer> hs = new HashSet<>();
+            for(int j=i;j<n;j++){
+                hs.add(nums.get(j));
 
-        for (int i = 0; i < n; i++) {
-            HashSet<Integer> set = new HashSet<>();
-
-            for (int j = i; j < n; j++) {
-                set.add(nums.get(j));
-
-                int count = set.size();
-                ans += count * count;
+                int count = hs.size();
+                ans+= count*count;
             }
         }
 
